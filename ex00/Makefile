@@ -1,8 +1,8 @@
-NAME = ex00
+NAME = convert
 CC = c++
-FLAGS = -Wall -Wextra -Werror -std=c++98
+FLAGS = -Wall -Wextra -Werror -std=c++11
 FILES = \
-		Bureaucrat.cpp \
+		ScalarConverter.cpp \
 		main.cpp
 OFILES = $(FILES:.cpp=.o)
 
