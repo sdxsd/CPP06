@@ -45,9 +45,10 @@ literals ScalarConverter::typeDetermination(std::string& literal) {
 			if (lit == ".")
 				return (INVALID);
 			if (lit == "nan" || lit == "nanf" || \
-				lit == "+inf" || lit == "-inf" || \
-				lit == "+inff" || lit == "-inff")
+				lit == "+inf" || lit == "-inf")
 				return (DOUBLE);
+			if (lit == "+inff" || lit == "-inff")
+				return (FLOAT);
 			for (long unsigned int i = 0; i < lit.length(); i++) {
 				if (std::isdigit(lit[i]))
 					digitEncountered = true;
