@@ -2,8 +2,26 @@
 #include <cctype>
 #include <iostream>
 
-void (*printFunctions[4])(literals type, const std::string& data) = {
-	[](literals type, const std::string& data) { // INTEGER.
+void printTypes(int i, char c, float f, double d) {
+	std::cout << "char:\t";
+	if (c >= ' ' && c <= '~')
+		std::cout << c << std::endl;
+	else
+		std::cout << "Non displayable character" << std::endl;
+	std::cout << "int:\t" << i << std::endl;
+	std::cout << "float:\t" << f << std::endl;
+	std::cout << "double:\t" << d << std::endl;
+}
+
+void (*printFunctions[4])(const std::string& data) = {
+	[](const std::string& data) { // CHARACTER.
+		char	c = data[0];
+		int		i = static_cast<int>(c);
+		float	f = static_cast<float>(c);
+		double	d = static_cast<double>(c);
+		printTypes(i, c, f, d);
+	},
+	[](const std::string& data) { // INTEGER.
 		int	convertedInt;
 
 		try { convertedInt = std::stoi(data); }
@@ -11,10 +29,34 @@ void (*printFunctions[4])(literals type, const std::string& data) = {
 			std::cout << invalid_arg.what() << std::endl;
 			return ;
 		}
-		char character = static_cast<char>(convertedInt);
-		float floatingPoint = static_cast<float>(convertedInt);
-		double doublePrecision = static_cast<double>(convertedInt);
-		std::printTypes()
+		char	character = static_cast<char>(convertedInt);
+		float	floatingPoint = static_cast<float>(convertedInt);
+		double	doublePrecision = static_cast<double>(convertedInt);
+		printTypes(convertedInt, character, floatingPoint, doublePrecision);
+	},
+	[](const std::string& data) { // FLOAT.
+		float	convertedFloat;
+		try { convertedFloat = std::stof(data); }
+		catch (std::invalid_argument &invalid_arg) {
+			std::cout << invalid_arg.what() << std::endl;
+			return ;
+		}
+		int		integer = static_cast<int>(convertedFloat);
+		char	character = static_cast<char>(convertedFloat);
+		double	doublePrecision = static_cast<double>(convertedFloat);
+		printTypes(integer, character, convertedFloat, doublePrecision);
+	},
+	[](const std::string& data) { // DOUBLE.
+		double	convertedDouble;
+		try { convertedDouble = std::stod(data); }
+		catch (std::invalid_argument &invalid_arg) {
+			std::cout << invalid_arg.what() << std::endl;
+			return ;
+		}
+		int		integer = static_cast<int>(convertedDouble);
+		char	character = static_cast<char>(convertedDouble);
+		float	floatingPoint = static_cast<float>(convertedDouble);
+		printTypes(integer, character, floatingPoint, convertedDouble);
 	}
 };
 
@@ -99,23 +141,10 @@ literals ScalarConverter::typeDetermination(std::string& literal) {
 		t = determinerFunctions[i](literal);
 		if (t != INVALID)
 			return (t);
-	 }
+	}
 	return (INVALID);
 }
 
 void ScalarConverter::convert(std::string& data) {
-
-	literals type = typeDetermination(data);
-
-	// switch (type) {
-	// 	case INTEGER:
-	// 		break;
-	// 	case CHARACTER:
-	// 		break;
-	// 	case FLOAT:
-	// 		break;
-	// 	case DOUBLE:
-	// 		break;
-	// 	case INVALID:
-	// }
+	printFunctions[typeDetermination(data)](data);
 }
