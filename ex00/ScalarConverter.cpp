@@ -15,8 +15,7 @@ ScalarConverter::~ScalarConverter(void) {
 }
 
 literals ScalarConverter::typeDetermination(std::string& literal) {
-	literals	type;
-
+	literals	t;
 	// Array of lambda functions for usage in type determination.
 	// Why? Lambda function arrays seemed cool.
 	literals (*determinerFunctions[3])(std::string &lit) = {
@@ -44,10 +43,9 @@ literals ScalarConverter::typeDetermination(std::string& literal) {
 			decimalEncountered = false;
 			if (lit == ".")
 				return (INVALID);
-			if (lit == "nan" || lit == "nanf" || \
-				lit == "+inf" || lit == "-inf")
+			else if (lit == "nan" || lit == "+inf" || lit == "-inf")
 				return (DOUBLE);
-			if (lit == "+inff" || lit == "-inff")
+			else if (lit == "+inff" || lit == "-inff" || lit == "nanf")
 				return (FLOAT);
 			for (long unsigned int i = 0; i < lit.length(); i++) {
 				if (std::isdigit(lit[i]))
@@ -81,11 +79,11 @@ literals ScalarConverter::typeDetermination(std::string& literal) {
 		}
 	};
 	for (int i = 0; i < 3; i++) {
-		type = determinerFunctions[i](literal);
-		if (type != INVALID)
-			break;
+		t = determinerFunctions[i](literal);
+		if (t != INVALID)
+			return (t);
 	}
-	return (type);
+	return (INVALID);
 }
 
 void ScalarConverter::convert(std::string& data) {
