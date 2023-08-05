@@ -1,15 +1,23 @@
 #include "ScalarConverter.hpp"
 #include <iostream>
+#include <math.h>
+#include <iomanip>
 
 void printTypes(int i, char c, float f, double d) {
 	std::cout << "char:\t";
-	if (c >= ' ' && c <= '~')
+	if (std::isnan(d) || isnanf(f) || isinf(f) || isinf(d))
+		std::cout << "impossible" << std::endl;
+	else if (c >= ' ' && c <= '~')
 		std::cout << c << std::endl;
 	else
 		std::cout << "Non displayable character" << std::endl;
-	std::cout << "int:\t" << i << std::endl;
-	std::cout << "float:\t" << f << std::endl;
-	std::cout << "double:\t" << d << std::endl;
+
+	if (std::isnan(d) || isnanf(f) || isinf(f) || isinf(d))
+		std::cout << "int:\timpossible" << std::endl;
+	else
+		std::cout << "int:\t" << i << std::endl;
+	std::cout << std::setprecision(1) << std::fixed << "float:\t" << f << 'f' << std::endl;
+	std::cout << std::setprecision(1) << std::fixed << "double:\t" << d << std::endl;
 }
 
 void (*printFunctions[4])(const std::string& data) = {
