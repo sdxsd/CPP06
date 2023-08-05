@@ -1,5 +1,4 @@
 #include "ScalarConverter.hpp"
-#include <cctype>
 #include <iostream>
 
 void printTypes(int i, char c, float f, double d) {
@@ -27,7 +26,7 @@ void (*printFunctions[4])(const std::string& data) = {
 		try { convertedInt = std::stoi(data); }
 		catch (std::invalid_argument &invalid_arg) {
 			std::cout << invalid_arg.what() << std::endl;
-			return ;
+			exit(1);
 		}
 		char	character = static_cast<char>(convertedInt);
 		float	floatingPoint = static_cast<float>(convertedInt);
@@ -39,7 +38,7 @@ void (*printFunctions[4])(const std::string& data) = {
 		try { convertedFloat = std::stof(data); }
 		catch (std::invalid_argument &invalid_arg) {
 			std::cout << invalid_arg.what() << std::endl;
-			return ;
+			exit(1);
 		}
 		int		integer = static_cast<int>(convertedFloat);
 		char	character = static_cast<char>(convertedFloat);
@@ -51,7 +50,7 @@ void (*printFunctions[4])(const std::string& data) = {
 		try { convertedDouble = std::stod(data); }
 		catch (std::invalid_argument &invalid_arg) {
 			std::cout << invalid_arg.what() << std::endl;
-			return ;
+			exit(1);
 		}
 		int		integer = static_cast<int>(convertedDouble);
 		char	character = static_cast<char>(convertedDouble);
