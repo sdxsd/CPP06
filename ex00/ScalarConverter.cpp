@@ -50,19 +50,18 @@ literals ScalarConverter::typeDetermination(std::string& literal) {
 			for (long unsigned int i = 0; i < lit.length(); i++) {
 				if (std::isdigit(lit[i]))
 					digitEncountered = true;
-				else if ((lit[i] == '+' || lit[i] == '-') && i != 0)
-					return (INVALID);
 				else if (lit[i] == '.') {
 					if (decimalEncountered == true)
 						return (INVALID);
 					else
 						decimalEncountered = true;
 				}
-				else if (i > 0 && !std::isdigit(lit[i]) && lit[i] != '.') {
-					if (i == lit.length() - 1 && lit[i] == 'f')
-						;
-					else
-						return (INVALID);
+				else if (!std::isdigit(lit[i]) && lit[i] != '.') {
+					if (i < 1 && (lit[i] == '+' || lit[i] == '-'))
+						continue;
+					else if (i == lit.length() - 1 && lit[i] == 'f')
+						continue;
+					else return (INVALID);
 				}
 			}
 			if (digitEncountered == true && lit[lit.length() - 1] == 'f')
