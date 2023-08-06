@@ -9,7 +9,7 @@ void printTypes(int i, char c, float f, double d, const std::string &data) {
 		std::cout << c << std::endl;
 	else
 		std::cout << "Non displayable character" << std::endl;
-	if (std::stof(data) > std::numeric_limits<int>::max() || std::stof(data) < std::numeric_limits<int>::min())
+	if (std::stod(data) > std::numeric_limits<int>::max() || std::stod(data) < std::numeric_limits<int>::min())
 		std::cout << "int:\toverflow" << std::endl;
 	else if (std::isnan(d) || isnanf(f) || isinf(f) || isinf(d))
 		std::cout << "int:\timpossible" << std::endl;
@@ -29,10 +29,9 @@ void (*printFunctions[4])(const std::string& data) = {
 	},
 	[](const std::string& data) { // INTEGER.
 		int	convertedInt;
-
 		try { convertedInt = std::stoi(data); }
-		catch (std::invalid_argument &invalid_arg) {
-			std::cout << invalid_arg.what() << std::endl;
+		catch (std::out_of_range &oor) {
+			std::cout << "Failed to convert argument to integer: (out of range)" << std::endl;
 			exit(1);
 		}
 		char	character = static_cast<char>(convertedInt);
@@ -43,8 +42,8 @@ void (*printFunctions[4])(const std::string& data) = {
 	[](const std::string& data) { // FLOAT.
 		float	convertedFloat;
 		try { convertedFloat = std::stof(data); }
-		catch (std::invalid_argument &invalid_arg) {
-			std::cout << invalid_arg.what() << std::endl;
+		catch (std::out_of_range &oor) {
+			std::cout << "Failed to convert argument to float: (out of range)" << std::endl;
 			exit(1);
 		}
 		int		integer = static_cast<int>(convertedFloat);
@@ -55,8 +54,8 @@ void (*printFunctions[4])(const std::string& data) = {
 	[](const std::string& data) { // DOUBLE.
 		double	convertedDouble;
 		try { convertedDouble = std::stod(data); }
-		catch (std::invalid_argument &invalid_arg) {
-			std::cout << invalid_arg.what() << std::endl;
+		catch (std::out_of_range &oor) {
+			std::cout << "Failed to convert argument to double: (out of range)" << std::endl;
 			exit(1);
 		}
 		int		integer = static_cast<int>(convertedDouble);
@@ -154,6 +153,7 @@ literals ScalarConverter::typeDetermination(std::string& literal) {
 		if (t != INVALID)
 			return (t);
 	}
+	std::cout << "Invalid argument." << std::endl;
 	return (INVALID);
 }
 
