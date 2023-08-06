@@ -133,9 +133,15 @@ ScalarConverter::ScalarConverter(void) {
 	;
 }
 
-// ScalarConverter::ScalarConverter(const ScalarConverter& copy) {
-// 	;
-// }
+ScalarConverter::ScalarConverter(const ScalarConverter& copy) {
+	*this = copy;
+	return ;
+}
+
+ScalarConverter &ScalarConverter::operator=(ScalarConverter const &copy) {
+	(void)copy;
+	return (*this);
+}
 
 ScalarConverter::~ScalarConverter(void) {
 	;

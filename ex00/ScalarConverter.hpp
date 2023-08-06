@@ -13,12 +13,12 @@ enum literals {
 
 class ScalarConverter {
 	private:
-		void printTypes(int integer, char character, float floatingPoint, double doublePrecision);
 		static literals typeDetermination(std::string &data);
 	public:
 		ScalarConverter(void);
 		ScalarConverter(const ScalarConverter& copy);
 		~ScalarConverter(void);
+		ScalarConverter &operator=(ScalarConverter const &copy);
 		static void	convert(std::string &data);
 };
 
