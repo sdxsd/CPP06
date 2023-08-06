@@ -1,6 +1,6 @@
 NAME = convert
 CC = c++
-FLAGS = -Wall -Wextra -Werror -std=c++11
+FLAGS = -Wall -Wextra -Werror -std=c++11 -g
 FILES = \
 		ScalarConverter.cpp \
 		main.cpp

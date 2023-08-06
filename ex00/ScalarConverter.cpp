@@ -1,6 +1,7 @@
 #include "ScalarConverter.hpp"
+#include <limits>
 
-void printTypes(int i, char c, float f, double d) {
+void printTypes(int i, char c, float f, double d, const std::string &data) {
 	std::cout << "char:\t";
 	if (std::isnan(d) || isnanf(f) || isinf(f) || isinf(d))
 		std::cout << "impossible" << std::endl;
@@ -8,8 +9,9 @@ void printTypes(int i, char c, float f, double d) {
 		std::cout << c << std::endl;
 	else
 		std::cout << "Non displayable character" << std::endl;
-
-	if (std::isnan(d) || isnanf(f) || isinf(f) || isinf(d))
+	if (std::stof(data) > std::numeric_limits<int>::max() || std::stof(data) < std::numeric_limits<int>::min())
+		std::cout << "int:\toverflow" << std::endl;
+	else if (std::isnan(d) || isnanf(f) || isinf(f) || isinf(d))
 		std::cout << "int:\timpossible" << std::endl;
 	else
 		std::cout << "int:\t" << i << std::endl;
@@ -23,7 +25,7 @@ void (*printFunctions[4])(const std::string& data) = {
 		int		i = static_cast<int>(c);
 		float	f = static_cast<float>(c);
 		double	d = static_cast<double>(c);
-		printTypes(i, c, f, d);
+		printTypes(i, c, f, d, data);
 	},
 	[](const std::string& data) { // INTEGER.
 		int	convertedInt;
@@ -36,7 +38,7 @@ void (*printFunctions[4])(const std::string& data) = {
 		char	character = static_cast<char>(convertedInt);
 		float	floatingPoint = static_cast<float>(convertedInt);
 		double	doublePrecision = static_cast<double>(convertedInt);
-		printTypes(convertedInt, character, floatingPoint, doublePrecision);
+		printTypes(convertedInt, character, floatingPoint, doublePrecision, data);
 	},
 	[](const std::string& data) { // FLOAT.
 		float	convertedFloat;
@@ -48,7 +50,7 @@ void (*printFunctions[4])(const std::string& data) = {
 		int		integer = static_cast<int>(convertedFloat);
 		char	character = static_cast<char>(convertedFloat);
 		double	doublePrecision = static_cast<double>(convertedFloat);
-		printTypes(integer, character, convertedFloat, doublePrecision);
+		printTypes(integer, character, convertedFloat, doublePrecision, data);
 	},
 	[](const std::string& data) { // DOUBLE.
 		double	convertedDouble;
@@ -60,7 +62,7 @@ void (*printFunctions[4])(const std::string& data) = {
 		int		integer = static_cast<int>(convertedDouble);
 		char	character = static_cast<char>(convertedDouble);
 		float	floatingPoint = static_cast<float>(convertedDouble);
-		printTypes(integer, character, floatingPoint, convertedDouble);
+		printTypes(integer, character, floatingPoint, convertedDouble, data);
 	}
 };
 
