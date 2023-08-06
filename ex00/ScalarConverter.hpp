@@ -2,6 +2,9 @@
 #define SCALARCONVERTER_H
 
 #include <string>
+#include <iostream>
+#include <math.h>
+#include <iomanip>
 
 enum literals {
 	CHARACTER,

@@ -1,7 +1,4 @@
 #include "ScalarConverter.hpp"
-#include <iostream>
-#include <math.h>
-#include <iomanip>
 
 void printTypes(int i, char c, float f, double d) {
 	std::cout << "char:\t";
