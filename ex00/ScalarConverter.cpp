@@ -1,16 +1,80 @@
 #include "ScalarConverter.hpp"
 #include <limits>
 
+// Array of lambda functions for usage in type determination.
+// Why? Lambda function arrays seemed cool.
+literals (*determinerFunctions[3])(const std::string &lit) = {
+	[](const std::string &lit) -> literals { // Integer determination.
+		int	digitEncountered;
+		for (long unsigned int i = 0; i < lit.length(); i++) {
+			if (!std::isdigit(lit[i])) {
+				if ((lit[i] == '+' || lit[i] == '-') && i == 0)
+					continue;
+				else return (INVALID);
+			}
+			if (std::isdigit(lit[i]))
+				digitEncountered = true;
+		}
+		if (digitEncountered)
+			return (INTEGER);
+		else
+			return (INVALID);
+	},
+	[](const std::string &lit) -> literals { // Double & float determination.
+		bool	digitEncountered;
+		bool	decimalEncountered;
+
+		digitEncountered = false;
+		decimalEncountered = false;
+		if (lit == ".")
+			return (INVALID);
+		else if (lit == "nan" || lit == "+inf" || lit == "-inf")
+			return (DOUBLE);
+		else if (lit == "+inff" || lit == "-inff" || lit == "nanf")
+			return (FLOAT);
+		for (long unsigned int i = 0; i < lit.length(); i++) {
+			if (std::isdigit(lit[i]))
+				digitEncountered = true;
+			else if (lit[i] == '.') {
+				if (decimalEncountered == true)
+					return (INVALID);
+				else
+					decimalEncountered = true;
+			}
+			else if (!std::isdigit(lit[i]) && lit[i] != '.') {
+				if (i < 1 && (lit[i] == '+' || lit[i] == '-'))
+					continue;
+				else if (i == lit.length() - 1 && lit[i] == 'f')
+					continue;
+				else return (INVALID);
+			}
+		}
+		if (digitEncountered == true && lit[lit.length() - 1] == 'f')
+			return (FLOAT);
+		else if (digitEncountered == true)
+			return (DOUBLE);
+		else
+			return (INVALID);
+	},
+	[](const std::string &lit) -> literals { // Character determination.
+		if (lit.length() == 1)
+			return (CHARACTER);
+		else return (INVALID);
+	}
+};
+
 void printTypes(int i, char c, float f, double d, const std::string &data) {
 	std::cout << "char:\t";
 	if (std::isnan(d) || isnanf(f) || isinf(f) || isinf(d))
 		std::cout << "impossible" << std::endl;
 	else if (c >= ' ' && c <= '~')
-		std::cout << c << std::endl;
+		std::cout << '\'' << c << '\'' << std::endl;
 	else
 		std::cout << "Non displayable character" << std::endl;
-	if (std::stod(data) > std::numeric_limits<int>::max() || std::stod(data) < std::numeric_limits<int>::min())
-		std::cout << "int:\toverflow" << std::endl;
+	if (determinerFunctions[2](data) == INVALID) {
+		if (std::stod(data) > std::numeric_limits<int>::max() || std::stod(data) < std::numeric_limits<int>::min())
+			std::cout << "int:\toverflow" << std::endl;
+	}
 	else if (std::isnan(d) || isnanf(f) || isinf(f) || isinf(d))
 		std::cout << "int:\timpossible" << std::endl;
 	else
@@ -62,68 +126,6 @@ void (*printFunctions[4])(const std::string& data) = {
 		char	character = static_cast<char>(convertedDouble);
 		float	floatingPoint = static_cast<float>(convertedDouble);
 		printTypes(integer, character, floatingPoint, convertedDouble, data);
-	}
-};
-
-// Array of lambda functions for usage in type determination.
-// Why? Lambda function arrays seemed cool.
-literals (*determinerFunctions[3])(std::string &lit) = {
-	[](std::string &lit) -> literals { // Integer determination.
-		int	digitEncountered;
-		for (long unsigned int i = 0; i < lit.length(); i++) {
-			if (!std::isdigit(lit[i])) {
-				if ((lit[i] == '+' || lit[i] == '-') && i == 0)
-					continue;
-				else return (INVALID);
-			}
-			if (std::isdigit(lit[i]))
-				digitEncountered = true;
-		}
-		if (digitEncountered)
-			return (INTEGER);
-		else
-			return (INVALID);
-	},
-	[](std::string &lit) -> literals { // Double & float determination.
-		bool	digitEncountered;
-		bool	decimalEncountered;
-
-		digitEncountered = false;
-		decimalEncountered = false;
-		if (lit == ".")
-			return (INVALID);
-		else if (lit == "nan" || lit == "+inf" || lit == "-inf")
-			return (DOUBLE);
-		else if (lit == "+inff" || lit == "-inff" || lit == "nanf")
-			return (FLOAT);
-		for (long unsigned int i = 0; i < lit.length(); i++) {
-			if (std::isdigit(lit[i]))
-				digitEncountered = true;
-			else if (lit[i] == '.') {
-				if (decimalEncountered == true)
-					return (INVALID);
-				else
-					decimalEncountered = true;
-			}
-			else if (!std::isdigit(lit[i]) && lit[i] != '.') {
-				if (i < 1 && (lit[i] == '+' || lit[i] == '-'))
-					continue;
-				else if (i == lit.length() - 1 && lit[i] == 'f')
-					continue;
-				else return (INVALID);
-			}
-		}
-		if (digitEncountered == true && lit[lit.length() - 1] == 'f')
-			return (FLOAT);
-		else if (digitEncountered == true)
-			return (DOUBLE);
-		else
-			return (INVALID);
-	},
-	[](std::string &lit) -> literals { // Character determination.
-		if (lit.length() == 1)
-			return (CHARACTER);
-		else return (INVALID);
 	}
 };
 
