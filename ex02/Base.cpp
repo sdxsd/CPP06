@@ -7,6 +7,10 @@
 #include "B.hpp"
 #include "C.hpp"
 
+Base::~Base(void) {
+	;
+}
+
 Base *(*generateInstance[3])(void) = {
 	[](void) -> Base* {
 		Base* x = new A;
@@ -23,15 +27,16 @@ Base *(*generateInstance[3])(void) = {
 };
 
 Base* generate(void) {
-	return (generateInstance[rand() % 2]());
+	srand(time(NULL));
+	return (generateInstance[rand() % 3]());
 }
 
 void identify(Base* p) {
 	if (dynamic_cast<A*>(p) != NULL)
 		std::cout << "Type == A" << std::endl;
-	if (dynamic_cast<B*>(p) != NULL)
+	else if (dynamic_cast<B*>(p) != NULL)
 		std::cout << "Type == B" << std::endl;
-	if (dynamic_cast<C*>(p) != NULL)
+	else if (dynamic_cast<C*>(p) != NULL)
 		std::cout << "Type == C" << std::endl;
 	else
 		std::cout << "Invalid" << std::endl;
