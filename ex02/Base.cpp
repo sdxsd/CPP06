@@ -61,18 +61,15 @@ void identify(Base& p) {
 	for (int i = 0; i < 3; i++) {
 		try {
 			tryCast[i](p);
-			if (i == 0)
-				std::cout << "(ref) Type == A" << std::endl;
-			else if (i == 1)
-				std::cout << "(ref) Type == B" << std::endl;
-			else if (i == 2)
-				std::cout << "(ref) Type == C" << std::endl;
-			else
-				std::cout << "(ref) Invalid" << std::endl;
+			switch (i) {
+				case 0: std::cout << "(ref) Type == A" << std::endl; return;
+				case 1: std::cout << "(ref) Type == B" << std::endl; return;
+				case 2: std::cout << "(ref) Type == C" << std::endl; return;
+			}
 		}
 		catch(std::bad_cast& error) {
 			if (i == 2)
-				std::cout << "(ref) Invalid" << std::endl;
+				std::cout << "(ref) Invalid: " << error.what() << std::endl;
 			continue;
 		}
 	}
