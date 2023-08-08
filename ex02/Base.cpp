@@ -7,9 +7,22 @@
 #include "B.hpp"
 #include "C.hpp"
 
-Base::~Base(void) {
-	;
-}
+Base::~Base(void) { ; }
+
+void (*tryCast[3])(Base& p) = {
+	[](Base& p) {
+		A& x = dynamic_cast<A&>(p);
+		(void)x;
+	},
+	[](Base& p) {
+		B& x = dynamic_cast<B&>(p);
+		(void)x;
+	},
+	[](Base& p) {
+		C& x = dynamic_cast<C&>(p);
+		(void)x;
+	}
+};
 
 Base *(*generateInstance[3])(void) = {
 	[](void) -> Base* {
@@ -32,16 +45,35 @@ Base* generate(void) {
 }
 
 void identify(Base* p) {
+	std::cout << "Identify by pointer" << std::endl;
 	if (dynamic_cast<A*>(p) != NULL)
-		std::cout << "Type == A" << std::endl;
+		std::cout << "(ptr) Type == A" << std::endl;
 	else if (dynamic_cast<B*>(p) != NULL)
-		std::cout << "Type == B" << std::endl;
+		std::cout << "(ptr) Type == B" << std::endl;
 	else if (dynamic_cast<C*>(p) != NULL)
-		std::cout << "Type == C" << std::endl;
+		std::cout << "(ptr) Type == C" << std::endl;
 	else
-		std::cout << "Invalid" << std::endl;
+		std::cout << "(ptr) Invalid" << std::endl;
 }
 
 void identify(Base& p) {
-	(void)p;
+	std::cout << "Identify by reference" << std::endl;
+	for (int i = 0; i < 3; i++) {
+		try {
+			tryCast[i](p);
+			if (i == 0)
+				std::cout << "(ref) Type == A" << std::endl;
+			else if (i == 1)
+				std::cout << "(ref) Type == B" << std::endl;
+			else if (i == 2)
+				std::cout << "(ref) Type == C" << std::endl;
+			else
+				std::cout << "(ref) Invalid" << std::endl;
+		}
+		catch(std::bad_cast& error) {
+			if (i == 2)
+				std::cout << "(ref) Invalid" << std::endl;
+			continue;
+		}
+	}
 }
