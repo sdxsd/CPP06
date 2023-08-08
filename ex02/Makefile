@@ -1,7 +1,7 @@
 NAME = realType
 CC = c++
 FLAGS = -Wall -Wextra -Werror -std=c++11
-FILES = \
+FILES = Base.cpp \
 		main.cpp
 OFILES = $(FILES:.cpp=.o)
 
