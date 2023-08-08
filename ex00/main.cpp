@@ -1,7 +1,4 @@
-#include <iostream>
 #include "ScalarConverter.hpp"
-
-using namespace std;
 
 int main(int argc, char *argv[]) {
 	ScalarConverter converter;
