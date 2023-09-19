@@ -67,14 +67,12 @@ void printTypes(int i, char c, float f, double d, const std::string &data) {
 	std::cout << "char:\t";
 	if (std::isnan(d) || isnanf(f) || isinf(f) || isinf(d))
 		std::cout << "impossible" << std::endl;
-	else if (c >= ' ' && c <= '~')
+	else if (d >= ' ' && d <= '~')
 		std::cout << '\'' << c << '\'' << std::endl;
 	else
 		std::cout << "Non displayable character" << std::endl;
-	if (determinerFunctions[2](data) == INVALID) {
-		if (std::stod(data) > std::numeric_limits<int>::max() || std::stod(data) < std::numeric_limits<int>::min())
-			std::cout << "int:\toverflow" << std::endl;
-	}
+	if (determinerFunctions[2](data) != CHARACTER && (std::stod(data) > std::numeric_limits<int>::max() || std::stod(data) < std::numeric_limits<int>::min()))
+		std::cout << "int:\toverflow" << std::endl;
 	else if (std::isnan(d) || isnanf(f) || isinf(f) || isinf(d))
 		std::cout << "int:\timpossible" << std::endl;
 	else
