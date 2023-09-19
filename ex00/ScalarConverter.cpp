@@ -83,7 +83,7 @@ void printTypes(int i, char c, float f, double d, const std::string &data) {
 	std::cout << std::setprecision(1) << std::fixed << "double:\t" << d << std::endl;
 }
 
-void (*printFunctions[4])(const std::string& data) = {
+void (*printFunctions[5])(const std::string& data) = {
 	[](const std::string& data) { // CHARACTER.
 		char	c = data[0];
 		int		i = static_cast<int>(c);
@@ -126,6 +126,9 @@ void (*printFunctions[4])(const std::string& data) = {
 		char	character = static_cast<char>(convertedDouble);
 		float	floatingPoint = static_cast<float>(convertedDouble);
 		printTypes(integer, character, floatingPoint, convertedDouble, data);
+	},
+	[](const std::string& data) {
+		std::cout << "Invalid argument: " << data << std::endl;
 	}
 };
 
@@ -155,7 +158,6 @@ literals ScalarConverter::typeDetermination(std::string& literal) {
 		if (t != INVALID)
 			return (t);
 	}
-	std::cout << "Invalid argument." << std::endl;
 	return (INVALID);
 }
 
